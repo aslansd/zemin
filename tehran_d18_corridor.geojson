@@ -1,0 +1,41 @@
+{
+  "type": "FeatureCollection",
+  "name": "Tehran_District18_Azadegan_Corridor",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "SW Tehran District 18 Water Main & Metro Corridor",
+        "city": "Tehran",
+        "asset_type": "metro_and_water_trunk"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              51.295,
+              35.635
+            ],
+            [
+              51.33,
+              35.635
+            ],
+            [
+              51.33,
+              35.665
+            ],
+            [
+              51.295,
+              35.665
+            ],
+            [
+              51.295,
+              35.635
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

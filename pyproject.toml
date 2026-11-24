@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zemin"
+version = "0.1.0"
+description = "Offline-first urban land subsidence, aquifer resilience, and infrastructure risk auditor for Sentinel-1 InSAR, piezometer, and GIS data."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Aslan Satary Dizaji", email = "aslansatary@gmail.com" }]
+keywords = ["insar", "subsidence", "geotechnics", "aquifer", "critical-slowing-down", "urban-risk", "sentinel-1", "tehran"]
+dependencies = []
+
+[project.optional-dependencies]
+web = ["fastapi>=0.115", "uvicorn>=0.30", "python-multipart>=0.0.9"]
+streamlit = ["streamlit>=1.38"]
+all = ["fastapi>=0.115", "uvicorn>=0.30", "python-multipart>=0.0.9", "streamlit>=1.38"]
+dev = ["pytest>=8.0", "ruff>=0.6", "httpx>=0.27"]
+
+[project.scripts]
+zemin = "zemin.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

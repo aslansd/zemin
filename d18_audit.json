@@ -1,0 +1,192 @@
+{
+  "tool_version": "0.1.0",
+  "audited_at_utc": "2026-11-24T17:30:41.563725+00:00",
+  "source_path": "examples/tehran_d18_insar.csv",
+  "source_sha256": "5e66441deba4aeb1a9fc99e80d1488b49748dcc8f3dde642730e3aa6299e3a55",
+  "config_sha256": "bfd316f313bdc220441a4655c8a96b97f48fc55d4c7ae5b4f1c13dcbfb70f00f",
+  "polygon_path": "examples/tehran_d18_corridor.geojson",
+  "polygon_sha256": "fcdb5e24c94815d52fd1e52f56978a8657670d4c99ea6920042b2bf27f0c0dc2",
+  "adapter_info": {
+    "adapter": "generic_csv",
+    "delimiter": ",",
+    "skipped_preamble_lines": 0,
+    "displacement_unit_scale": 1.0,
+    "los_incidence_deg": null,
+    "resolved_columns": {
+      "timestamp": "timestamp",
+      "site_id": "site_id",
+      "lat": "lat",
+      "lon": "lon",
+      "displacement_mm": "displacement_mm",
+      "coherence": "coherence",
+      "groundwater_depth_m": "groundwater_depth_m",
+      "tws_cm": "tws_cm"
+    }
+  },
+  "record_count": 276,
+  "site_count": 3,
+  "span_years": 2.99,
+  "worst_velocity_mm_yr": -176.95,
+  "mean_velocity_mm_yr": -123.25,
+  "max_angular_distortion": 0.004047,
+  "max_angular_distortion_inv": "1/247",
+  "risk_grade": "SEVERE",
+  "sites": [
+    {
+      "site_id": "D18_BOWL_A",
+      "lat": 35.648,
+      "lon": 51.31,
+      "epoch_count": 92,
+      "span_years": 2.99,
+      "velocity_mm_yr": -176.95,
+      "acceleration_mm_yr2": -25.22,
+      "cumulative_mm": -528.68,
+      "mean_coherence": 0.82
+    },
+    {
+      "site_id": "D18_EDGE_B",
+      "lat": 35.6489,
+      "lon": 51.31,
+      "epoch_count": 92,
+      "span_years": 2.99,
+      "velocity_mm_yr": -41.48,
+      "acceleration_mm_yr2": -3.28,
+      "cumulative_mm": -123.63,
+      "mean_coherence": 0.834
+    },
+    {
+      "site_id": "D18_TRUNK_C",
+      "lat": 35.648,
+      "lon": 51.3114,
+      "epoch_count": 92,
+      "span_years": 2.99,
+      "velocity_mm_yr": -151.31,
+      "acceleration_mm_yr2": -16.43,
+      "cumulative_mm": -437.72,
+      "mean_coherence": 0.682
+    }
+  ],
+  "findings": [
+    {
+      "code": "AQUIFER_REBOUND_FAILURE",
+      "title": "Seasonal aquifer elastic rebound failure (inelastic compaction)",
+      "severity": "critical",
+      "summary": "Site 'D18_BOWL_A' lost seasonal elastic uplift: wet-season recovery ratio dropped to 0.0% (seasonal amplitude 2.3 mm -> 3.7 mm, decay -62%), consistent with permanent clay aquitard compaction.",
+      "site_id": "D18_BOWL_A",
+      "metric_value": 0.0,
+      "metric_unit": "rebound_ratio",
+      "evidence": {
+        "site_id": "D18_BOWL_A",
+        "elastic_rebound_ratio": 0.0,
+        "early_seasonal_amp_mm": 2.29,
+        "late_seasonal_amp_mm": 3.69,
+        "amplitude_decay_fraction": -0.616
+      }
+    },
+    {
+      "code": "DIFFERENTIAL_SETTLEMENT_TILT",
+      "title": "Structural differential settlement / angular distortion risk",
+      "severity": "critical",
+      "summary": "Differential settlement of 405.0 mm over 100.1 m between 'D18_BOWL_A' and 'D18_EDGE_B' yields angular distortion 1/247, exceeding Eurocode-7 cracking limit (1/500).",
+      "site_id": "D18_BOWL_A..D18_EDGE_B",
+      "metric_value": 0.004047,
+      "metric_unit": "rad",
+      "evidence": {
+        "site_a": "D18_BOWL_A",
+        "site_b": "D18_EDGE_B",
+        "baseline_m": 100.1,
+        "differential_settlement_mm": 405.0,
+        "differential_rate_mm_yr": 135.5,
+        "angular_distortion": 0.004047,
+        "angular_distortion_ratio": "1/247"
+      }
+    },
+    {
+      "code": "GROUNDWATER_COMPACTION_COUPLING",
+      "title": "Severe groundwater depletion coupled to skeletal aquifer compaction",
+      "severity": "critical",
+      "summary": "Site 'D18_TRUNK_C' shows groundwater drawdown of 0.76 m/yr and GRACE TWS loss -1.34 cm/yr, driving 199.9 mm of land subsidence per meter of head drop.",
+      "site_id": "D18_TRUNK_C",
+      "metric_value": 199.9,
+      "metric_unit": "mm/m",
+      "evidence": {
+        "site_id": "D18_TRUNK_C",
+        "groundwater_drawdown_m_yr": 0.757,
+        "compaction_ratio_mm_per_m": 199.91,
+        "grace_tws_trend_cm_yr": -1.338
+      }
+    },
+    {
+      "code": "SUBSIDENCE_ACCELERATION",
+      "title": "Accelerating ground subsidence (non-linear downward curvature)",
+      "severity": "critical",
+      "summary": "Site 'D18_BOWL_A' exhibits statistically significant downward acceleration of -27.3 mm/yr^2 (t=37.9), indicating intensifying compaction rather than steady creep.",
+      "site_id": "D18_BOWL_A",
+      "metric_value": -27.29,
+      "metric_unit": "mm/yr^2",
+      "evidence": {
+        "site_id": "D18_BOWL_A",
+        "acceleration_mm_yr2": -27.29,
+        "initial_velocity_mm_yr": -135.57,
+        "t_statistic": 37.88
+      }
+    },
+    {
+      "code": "SUBSIDENCE_VELOCITY_HAZARD",
+      "title": "High-rate vertical land subsidence",
+      "severity": "critical",
+      "summary": "3/3 monitoring point(s) exceed 20 mm/yr subsidence; worst site 'D18_BOWL_A' sinks at -177.0 mm/yr (cumulative -528.7 mm over 2.99 yr).",
+      "site_id": "D18_BOWL_A",
+      "metric_value": -176.95,
+      "metric_unit": "mm/yr",
+      "evidence": {
+        "worst_site": "D18_BOWL_A",
+        "worst_velocity_mm_yr": -176.95,
+        "affected_sites": [
+          "D18_BOWL_A",
+          "D18_EDGE_B",
+          "D18_TRUNK_C"
+        ],
+        "mean_affected_velocity_mm_yr": -123.25
+      }
+    },
+    {
+      "code": "CRITICAL_SLOWING_DOWN",
+      "title": "Ornstein-Uhlenbeck critical slowing down (declining recovery rate)",
+      "severity": "warning",
+      "summary": "Detrended residuals at 'D18_BOWL_A' show declining OU recovery rate (Kendall tau=-0.42, final AR(1) phi=0.79, variance ratio=6.5x, tau_var=+0.80), signaling loss of dynamical resilience.",
+      "site_id": "D18_BOWL_A",
+      "metric_value": -0.418,
+      "metric_unit": "kendall_tau",
+      "evidence": {
+        "site_id": "D18_BOWL_A",
+        "lambda_kendall_tau": -0.418,
+        "variance_kendall_tau": 0.798,
+        "variance_ratio_late_to_early": 6.52,
+        "final_ar1_phi": 0.787,
+        "final_recovery_rate_per_yr": 7.22
+      }
+    },
+    {
+      "code": "INSAR_DATA_INTEGRITY",
+      "title": "InSAR telemetry quality hazard (coherence loss / unwrapping jump)",
+      "severity": "warning",
+      "summary": "Detected low coherence (<0.45) at 1 site(s) and 1 suspected phase-unwrapping jump(s) (>=24 mm); verify interferogram unwrapping before engineering sign-off.",
+      "site_id": "D18_TRUNK_C",
+      "metric_value": 2.0,
+      "metric_unit": "anomalies",
+      "evidence": {
+        "low_coherence_sites": [
+          "D18_TRUNK_C"
+        ],
+        "unwrapping_jumps": [
+          {
+            "site_id": "D18_TRUNK_C",
+            "epoch": "2025-03-24",
+            "step_anomaly_mm": -29.9
+          }
+        ]
+      }
+    }
+  ]
+}
