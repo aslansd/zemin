@@ -1,0 +1,122 @@
+Metadata-Version: 2.4
+Name: zemin
+Version: 0.1.0
+Summary: Offline-first urban land subsidence, aquifer resilience, and infrastructure risk auditor for Sentinel-1 InSAR, piezometer, and GIS data.
+Author-email: Aslan Satary Dizaji <aslansatary@gmail.com>
+License: Apache-2.0
+Keywords: insar,subsidence,geotechnics,aquifer,critical-slowing-down,urban-risk,sentinel-1,tehran
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: web
+Requires-Dist: fastapi>=0.115; extra == "web"
+Requires-Dist: uvicorn>=0.30; extra == "web"
+Requires-Dist: python-multipart>=0.0.9; extra == "web"
+Provides-Extra: streamlit
+Requires-Dist: streamlit>=1.38; extra == "streamlit"
+Provides-Extra: all
+Requires-Dist: fastapi>=0.115; extra == "all"
+Requires-Dist: uvicorn>=0.30; extra == "all"
+Requires-Dist: python-multipart>=0.0.9; extra == "all"
+Requires-Dist: streamlit>=1.38; extra == "all"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"
+Requires-Dist: httpx>=0.27; extra == "dev"
+Dynamic: license-file
+
+# zemin
+
+**زمین** — *earth, ground, geotechnical subsoil.* The same word in Persian
+(*zamīn*), Azerbaijani (*zəmin*), and Turkish (*zemin*, as in *zemin etüdü* —
+geotechnical ground survey).
+
+Audit urban land subsidence, seasonal aquifer rebound failure, dynamical
+resilience (Ornstein-Uhlenbeck critical slowing down), and structural
+differential settlement from open Sentinel-1 InSAR, piezometer, and GeoJSON
+corridor data—entirely offline.
+
+Southwest Tehran (Districts 17–19, Shahriar, Varamin) and Karaj experience
+severe groundwater-driven subsidence that silently stresses water mains, gas
+trunks, metro tunnel linings, and building foundations. Engineering consultancies
+and utilities often rely on static, years-old borehole reports while InSAR
+pipelines fail silently on phase-unwrapping jumps or low coherence. `zemin`
+turns raw InSAR and groundwater exports into versioned, reproducible
+geotechnical risk dossiers.
+
+**Zero runtime dependencies for the core engine (no GDAL, no Shapely, no cloud APIs). Runs 100% offline.**
+
+```bash
+pip install zemin
+```
+
+Python 3.10+. Apache 2.0.
+
+[INSTALL](INSTALL.md) · [TESTING](TESTING.md) · [TROUBLESHOOTING](TROUBLESHOOTING.md) ·
+[PUBLISHING](PUBLISHING.md) · [ROADMAP](ROADMAP.md) · [CHANGELOG](CHANGELOG.md)
+
+---
+
+## The thirty-second version
+
+```bash
+# 1. Generate a 3-year synthetic SW Tehran District 18 corridor + GeoJSON and audit it
+zemin demo --out-csv tehran_d18_insar.csv --out-geojson tehran_d18_corridor.geojson
+
+# 2. Audit any MintPy, LiCSAR, or TAMAB piezometer CSV inside a project polygon + Persian dossier via Ollama
+zemin audit examples/tehran_d18_insar.csv \
+  --polygon examples/tehran_d18_corridor.geojson \
+  --json-out d18_audit.json \
+  --dossier fa --model gemma3:12b
+
+# 3. Compare two survey periods longitudinally
+zemin diff examples/tehran_d18_insar.csv examples/tehran_control_stable.csv \
+  --polygon examples/tehran_d18_corridor.geojson
+```
+
+---
+
+## Seven dynamical & geotechnical hazards detected
+
+| Code | What it measures |
+|---|---|
+| `SUBSIDENCE_VELOCITY_HAZARD` | Vertical subsidence velocity (mm/yr), auto-projecting Sentinel-1 LOS via `d_v = d_LOS / cos(theta)` |
+| `SUBSIDENCE_ACCELERATION` | Seasonally adjusted quadratic downward curvature (mm/yr^2) with t-statistic significance gating |
+| `AQUIFER_REBOUND_FAILURE` | Collapse of wet-season elastic uplift & seasonal harmonic decay (irreversible clay compaction) |
+| `CRITICAL_SLOWING_DOWN` | Rolling Ornstein-Uhlenbeck AR(1) recovery-rate decline (Marriott-Pope bias corrected) + rising variance |
+| `DIFFERENTIAL_SETTLEMENT_TILT` | Pairwise Haversine angular distortion `|dS| / L` against Eurocode-7 limits (`1/500` cracking, `1/250` distress) |
+| `GROUNDWATER_COMPACTION_COUPLING` | Piezometer head drop (m/yr) and GRACE TWS loss (cm/yr) coupled to skeletal compaction ratio (mm/m) |
+| `INSAR_DATA_INTEGRITY` | Pre-sign-off quality audit for low temporal coherence and Sentinel-1 C-band phase-unwrapping jumps (~28 mm) |
+
+---
+
+## Built-in zero-dependency adapters
+
+| Adapter | Data Source | Handles |
+|---|---|---|
+| `mintpy` | MintPy / ASF HyP3 / ARIA PS-InSAR | Both wide (`D20240101...`) and long formats, meters-to-mm scaling, LOS-to-vertical projection |
+| `licsar` | COMET-LiCSAR / LiCSBAS | Frame cumulative displacement exports and average coherence |
+| `piezometer` | Iran TAMAB / ABFA wells & GRACE/ERA5 | Depth-to-water, extensometer settlement, Persian/Arabic digits (`۰۱۲۳۴۵۶۷۸۹`) |
+| `generic` | Standard `.csv` and `.jsonl` | Clean multi-site geospatial time series |
+
+GeoJSON `Polygon` and `MultiPolygon` spatial filtering is built into
+`zemin.geo` using pure-Python ray-casting and Haversine geometry—zero native
+GDAL/GEOS compilation issues.
+
+---
+
+## Offline RTL Persian dashboards
+
+```bash
+# FastAPI + built-in RTL Persian dashboard (http://127.0.0.1:8000)
+pip install "zemin[web]"
+zemin serve --port 8000
+
+# Or RTL Persian Streamlit dashboard
+pip install "zemin[streamlit]"
+streamlit run src/zemin/streamlit_app.py
+```
+
+## Licence
+
+Apache 2.0.

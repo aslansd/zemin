@@ -1,0 +1,2 @@
+[console_scripts]
+zemin = zemin.cli:main
